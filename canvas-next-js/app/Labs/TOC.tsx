@@ -3,6 +3,11 @@ export default function TOC() {
   return (
     <ul>
       <li>
+        <Link href="/" id="wd-lab1-link">
+          Canvas
+        </Link>
+      </li>
+      <li>
         <Link href="/Labs" id="wd-lab1-link">
           Home{" "}
         </Link>
