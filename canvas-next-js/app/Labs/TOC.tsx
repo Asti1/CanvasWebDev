@@ -27,6 +27,14 @@ export default function TOC() {
           Lab 3{" "}
         </Link>
       </li>
+      <li>
+        <Link
+          href="https://github.com/Asti1/CanvasWebDev/tree/main"
+          id="wd-source-code-link"
+        >
+          Source Code
+        </Link>
+      </li>
     </ul>
   );
 }

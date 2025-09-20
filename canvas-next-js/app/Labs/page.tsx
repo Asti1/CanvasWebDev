@@ -2,7 +2,7 @@ import Link from "next/link";
 export default function Labs() {
   return (
     <>
-      <div className="text-3xl font-bold underline">Labs Page</div>
+      <div className="text-3xl font-bold underline">Astitva Goel </div>
       <div>
         <ul>
           <li>
