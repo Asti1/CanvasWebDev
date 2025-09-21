@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-export default async function CoursesPage({
+export default function CoursesPage({
   params,
 }: {
   params: { cid: string; aid: string };
