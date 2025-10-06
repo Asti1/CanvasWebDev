@@ -17,6 +17,10 @@ export default function AccountNavigation() {
         Profile{" "}
       </Link>{" "}
       <br />
+      <Link href="/Labs" className="list-group-item text-danger border-0">
+        {" "}
+        Labs{" "}
+      </Link>{" "}
     </div>
   );
 }

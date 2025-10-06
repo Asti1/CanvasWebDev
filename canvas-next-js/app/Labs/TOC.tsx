@@ -27,7 +27,6 @@ export default function TOC() {
         <NavLink href="/" as={Link}>
           Kambaz
         </NavLink>{" "}
-        jga
       </NavItem>
       <NavItem>
         <NavLink href="https://github.com/jannunzi">My GitHub</NavLink>
