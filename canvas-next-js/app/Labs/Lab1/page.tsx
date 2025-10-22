@@ -1,4 +1,5 @@
 "use client";
+
 export default function Lab1() {
   return (
     <div id="wd-lab1">
@@ -176,7 +177,6 @@ export default function Lab1() {
             title="The last name"
             id="wd-text-fields-last-name"
           />
-          {/* copy rest of form elements here */}
         </form>
         <h5>Text boxes</h5>
         <label>Biography:</label>

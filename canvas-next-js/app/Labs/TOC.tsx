@@ -1,6 +1,9 @@
+"use client";
 import { Nav, NavItem, NavLink } from "react-bootstrap";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export default function TOC() {
+  const pathname = usePathname();
   return (
     <Nav variant="pills">
       <NavItem>
@@ -9,17 +12,17 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/Labs/Lab1" as={Link}>
+        <NavLink href="/Labs/Lab1" as={Link} active={pathname.includes("Lab1")}>
           Lab 1
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/Labs/Lab2" as={Link}>
+        <NavLink href="/Labs/Lab2" as={Link} active={pathname.includes("Lab2")}>
           Lab 2
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/Labs/Lab3" as={Link}>
+        <NavLink href="/Labs/Lab3" as={Link} active={pathname.includes("Lab3")}>
           Lab 3
         </NavLink>
       </NavItem>
@@ -29,7 +32,7 @@ export default function TOC() {
         </NavLink>{" "}
       </NavItem>
       <NavItem>
-        <NavLink href="https://github.com/jannunzi">My GitHub</NavLink>
+        <NavLink href="https://github.com/Asti1">My GitHub</NavLink>
       </NavItem>
     </Nav>
   );
