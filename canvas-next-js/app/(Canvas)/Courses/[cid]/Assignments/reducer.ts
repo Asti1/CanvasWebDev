@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 import { assignments } from "../../../Database";
+interface Assignment {
+  _id: string;
+  title: string;
+  course: string;
+  description?: string;
+  points?: number;
+  dueDate?: string;
+  availableFrom?: string;
+  availableUntil?: string;
+}
+interface AssignmentsState {
+  assignments: Assignment[];
+}
 
-const initialState = {
+const initialState: AssignmentsState = {
   assignments: assignments,
 };
 
