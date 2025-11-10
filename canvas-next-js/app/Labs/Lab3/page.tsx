@@ -1,4 +1,3 @@
-"use client";
 import Add from "./Add";
 import AddingAndRemovingToFromArrays from "./AddingAndRemovingToFromArrays";
 import ArrayIndexAndLength from "./ArrayIndexAndLength";
@@ -32,64 +31,50 @@ import VariablesAndConstants from "./VariablesAndConstants";
 import VariableTypes from "./VariableTypes";
 import AddPathParameters from "./AddPathParameters";
 import PathParameters from "./PathParameters";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
-import { Provider, useSelector } from "react-redux";
-import store from "../store";
-import { RootState } from "@reduxjs/toolkit/query";
 export default function Lab3() {
-  const { todos } = useSelector((state) => state.todosReducer);
   return (
-    <>
-      {/* <Provider store={store}> */}
-      <div id="wd-lab3">
-        <h3>Lab 3</h3>
-        <VariablesAndConstants />
-        <VariableTypes />
-        <BooleanVariables />
-        <IfElse />
-        <TernaryOperator />
-        <ConditionalOutputIfElse />
-        <ConditionalOutputInline />
-        <LegacyFunctions />
-        <ArrowFunctions />
-        <ImpliedReturn />
-        <TemplateLiterals />
-        <SimpleArrays />
-        <ArrayIndexAndLength />
-        <AddingAndRemovingToFromArrays />
-        <ForLoops />
-        <MapFunction />
-        <FindFunction />
-        <FindIndex />
-        <FilterFunction />
-        <JsonStringify />
-        <House />
-        <TodoList />
-        <Spreading />
-        <Destructing />
-        <FunctionDestructing />
-        <DestructingImports />
-        <Classes />
-        <Styles />
-        <Add a={5} b={10} />
-        <h4>Square of 4</h4>
-        <Square>4</Square>
-        <hr />
-        <Highlight>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Suscipitratione eaque illo minus cum, saepe totam vel nihil repellat
-          nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores,
-          provident voluptates.
-        </Highlight>
-        <AddPathParameters />
-        <PathParameters />
-        <ListGroup>
-          {todos.map((todo) => (
-            <ListGroupItem key={todo.id}>{todo.title}</ListGroupItem>
-          ))}
-        </ListGroup>
-      </div>
-      {/* </Provider> */}
-    </>
+    <div id="wd-lab3">
+      <h3>Lab 3</h3>
+      <VariablesAndConstants />
+      <VariableTypes />
+      <BooleanVariables />
+      <IfElse />
+      <TernaryOperator />
+      <ConditionalOutputIfElse />
+      <ConditionalOutputInline />
+      <LegacyFunctions />
+      <ArrowFunctions />
+      <ImpliedReturn />
+      <TemplateLiterals />
+      <SimpleArrays />
+      <ArrayIndexAndLength />
+      <AddingAndRemovingToFromArrays />
+      <ForLoops />
+      <MapFunction />
+      <FindFunction />
+      <FindIndex />
+      <FilterFunction />
+      <JsonStringify />
+      <House />
+      <TodoList />
+      <Spreading />
+      <Destructing />
+      <FunctionDestructing />
+      <DestructingImports />
+      <Classes />
+      <Styles />
+      <Add a={5} b={10} />
+      <h4>Square of 4</h4>
+      <Square>4</Square>
+      <hr />
+      <Highlight>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione
+        eaque illo minus cum, saepe totam vel nihil repellat nemo explicabo
+        excepturi consectetur. Modi omnis minus sequi maiores, provident
+        voluptates.
+      </Highlight>
+      <AddPathParameters />
+      <PathParameters />
+    </div>
   );
 }
