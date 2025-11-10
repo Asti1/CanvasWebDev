@@ -35,8 +35,9 @@ import PathParameters from "./PathParameters";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { Provider, useSelector } from "react-redux";
 import store from "../store";
+import { RootState } from "@reduxjs/toolkit/query";
 export default function Lab3() {
-  const { todos } = useSelector((state: any) => state.todosReducer);
+  const { todos } = useSelector((state) => state.todosReducer);
   return (
     <>
       {/* <Provider store={store}> */}
@@ -83,7 +84,7 @@ export default function Lab3() {
         <AddPathParameters />
         <PathParameters />
         <ListGroup>
-          {todos.map((todo: any) => (
+          {todos.map((todo) => (
             <ListGroupItem key={todo.id}>{todo.title}</ListGroupItem>
           ))}
         </ListGroup>
