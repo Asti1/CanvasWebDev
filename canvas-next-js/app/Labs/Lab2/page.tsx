@@ -1,3 +1,4 @@
+"use client";
 import "./index.css";
 import Dimensions from "./Dimensions";
 import BackgroundColors from "./BackgroundColors";

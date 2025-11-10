@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import Link from "next/link";
-import * as db from "../Database";
+
 import {
   Button,
   Card,
@@ -8,26 +10,95 @@ import {
   CardText,
   CardTitle,
   Col,
+  FormControl,
   Row,
 } from "react-bootstrap";
+import { useState } from "react";
+import { RootState } from "../store";
+
 import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-} from "react";
+  addNewCourse,
+  deleteCourse,
+  updateCourse,
+} from "../Courses/[cid]/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import * as db from "../Database";
 export default function Dashboard() {
-  const courses = db.courses;
+  const { courses } = useSelector((state: RootState) => state.coursesReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
+
+  const dispatch = useDispatch();
+  // const [courses, setCourses] = useState<any[]>(db.courses);
+  const [course, setCourse] = useState({
+    _id: "0",
+    name: "New Course",
+    number: "New Number",
+    startDate: "2023-09-10",
+    endDate: "2023-12-15",
+    image: "/images/reactjs.jpeg",
+    description: "New Description",
+  });
+
+  const { enrollements } = db;
+  const displayCourses = currentUser
+    ? courses.filter((course: any) =>
+        enrollements.some(
+          (enrollement) =>
+            enrollement.user === currentUser._id &&
+            enrollement.course === course._id
+        )
+      )
+    : courses;
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <h5>
+        New Course
+        <button
+          className="btn btn-primary float-end"
+          id="wd-add-new-course-click"
+          onClick={() => dispatch(addNewCourse(course))}
+        >
+          {" "}
+          Add{" "}
+        </button>
+        <Button
+          className="float-end me-2"
+          onClick={() => dispatch(updateCourse(course))}
+        >
+          Update
+        </Button>
+        <Button
+          className="float-end me-2"
+          onClick={(event) => {
+            event.preventDefault();
+            dispatch(deleteCourse(course._id));
+          }}
+        >
+          Delete{" "}
+        </Button>
+      </h5>
+      <FormControl
+        value={course.name}
+        className="mb-2"
+        onChange={(e) => setCourse({ ...course, name: e.target.value })}
+      />
+      <FormControl
+        value={course.description}
+        as="textarea"
+        rows={3}
+        onChange={(e) => setCourse({ ...course, description: e.target.value })}
+      />
+      <hr />
       <h2 id="wd-dashboard-published">
-        Published Courses ({courses.length})
+        Published Courses ({displayCourses.length})
       </h2>{" "}
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses.map((course) => (
+          {displayCourses.map((course: any) => (
             <Col
               key={course._id}
               className="wd-dashboard-course"
@@ -55,6 +126,26 @@ export default function Dashboard() {
                       {course.description}{" "}
                     </CardText>
                     <Button variant="primary"> Go </Button>
+                    <Button
+                      id="wd-edit-course-click"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setCourse(course);
+                      }}
+                      className="me-2 float-end"
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      onClick={(event) => {
+                        event.preventDefault();
+                        deleteCourse(course._id);
+                      }}
+                      className="float-end"
+                    >
+                      Delete
+                    </Button>
                   </CardBody>
                 </Link>
               </Card>

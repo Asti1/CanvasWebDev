@@ -1,124 +1,8 @@
-// "use client";
-
-// import Link from "next/link";
-// import {
-//   Button,
-//   Card,
-//   Col,
-//   Container,
-//   Form,
-//   InputGroup,
-//   Row,
-// } from "react-bootstrap";
-
-// export default function Assignments() {
-//   return (
-//     <Container id="wd-assignments" className="mt-4">
-//       {/* Search and Action Buttons */}
-//       <Row className="align-items-center mb-3">
-//         <Col md={6}>
-//           <InputGroup>
-//             <Form.Control placeholder="Search for Assignments" />
-//           </InputGroup>
-//         </Col>
-//         <Col md={6} className="text-end">
-//           <Button variant="outline-secondary" className="me-2">
-//             + Group
-//           </Button>
-//           <Button variant="danger" className="me-2">
-//             + Assignment
-//           </Button>
-//           <Button variant="outline-secondary" className="me-2">
-//             + Quizzes
-//           </Button>
-//           <Button variant="outline-secondary" className="me-2">
-//             + Exams
-//           </Button>
-//           <Button variant="outline-secondary">+ Projects</Button>
-//         </Col>
-//       </Row>
-
-//       {/* Assignments Header */}
-//       <Card className="shadow-sm border-0 mb-3">
-//         <Card.Header className="d-flex justify-content-between align-items-center bg-light">
-//           <h5 className="mb-0">ASSIGNMENTS </h5>
-//           <span className="fw-normal text-muted border-gray">40% of Total</span>
-//           <Button variant="outline-secondary" size="sm">
-//             +
-//           </Button>
-//         </Card.Header>
-
-//         <Card.Body className="p-0">
-//           {/* A1 */}
-//           <div className="border-bottom p-3 d-flex align-items-start">
-//             <div className="me-3 text-success">
-//               <i className="bi bi-list"></i>
-//             </div>
-//             <div>
-//               <Link
-//                 href="/Courses/1234/Assignments/123/Editor"
-//                 className="fw-bold text-decoration-none text-primary"
-//               >
-//                 A1 - ENV + HTML
-//               </Link>
-//               <p className="text-muted mb-0 small">
-//                 Multiple Modules |{" "}
-//                 <span className="text-dark">Not available until</span> May 6 at
-//                 12:00am |<span className="text-dark"> Due</span> May 13 at
-//                 11:59pm | 100 Points
-//               </p>
-//             </div>
-//           </div>
-
-//           {/* A2 */}
-//           <div className="border-bottom p-3 d-flex align-items-start">
-//             <div className="me-3 text-success">
-//               <i className="bi bi-list"></i>
-//             </div>
-//             <div>
-//               <Link
-//                 href="/Courses/1234/Assignments/123/Editor"
-//                 className="fw-bold text-decoration-none text-primary"
-//               >
-//                 A2 - CSS + BOOTSTRAP
-//               </Link>
-//               <p className="text-muted mb-0 small">
-//                 Multiple Modules |{" "}
-//                 <span className="text-dark">Not available until</span> May 13 at
-//                 12:00am |<span className="text-dark"> Due</span> May 20 at
-//                 11:59pm | 100 Points
-//               </p>
-//             </div>
-//           </div>
-
-//           {/* A3 */}
-//           <div className="p-3 d-flex align-items-start">
-//             <div className="me-3 text-success">
-//               <i className="bi bi-list"></i>
-//             </div>
-//             <div>
-//               <Link
-//                 href="/Courses/1234/Assignments/123/Editor"
-//                 className="fw-bold text-decoration-none text-primary"
-//               >
-//                 A3 - JAVASCRIPT + REACT
-//               </Link>
-//               <p className="text-muted mb-0 small">
-//                 Multiple Modules |{" "}
-//                 <span className="text-dark">Not available until</span> May 20 at
-//                 12:00am |<span className="text-dark"> Due</span> May 27 at
-//                 11:59pm | 100 Points
-//               </p>
-//             </div>
-//           </div>
-//         </Card.Body>
-//       </Card>
-//     </Container>
-//   );
-// }
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
+import { useRouter, useParams } from "next/navigation";
 import {
   Button,
   Card,
@@ -127,20 +11,55 @@ import {
   Form,
   InputGroup,
   Row,
+  Modal,
 } from "react-bootstrap";
-import { assignments } from "../../../Database";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store";
 
-export default function AssignmentsPage({
-  params,
-}: {
-  params: { cid: string };
-}) {
-  const { cid } = params;
+import { useState } from "react";
+import { FaTrash } from "react-icons/fa";
+import { deleteAssignment } from "./reducer";
+
+export default function AssignmentsPage() {
+  const { cid } = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(
+    null
+  );
 
   // Filter assignments belonging to this course
   const courseAssignments = assignments.filter(
-    (assignment) => assignment.course === cid
+    (assignment: any) => assignment.course === cid
   );
+
+  const handleDeleteClick = (assignmentId: string) => {
+    setAssignmentToDelete(assignmentId);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (assignmentToDelete) {
+      dispatch(deleteAssignment(assignmentToDelete));
+    }
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setAssignmentToDelete(null);
+  };
+
+  const handleAddAssignment = () => {
+    router.push(`/Courses/${cid}/Assignments/new/Editor`);
+  };
 
   return (
     <Container id="wd-assignments" className="mt-4">
@@ -155,16 +74,13 @@ export default function AssignmentsPage({
           <Button variant="outline-secondary" className="me-2">
             + Group
           </Button>
-          <Button variant="danger" className="me-2">
+          <Button
+            variant="danger"
+            className="me-2"
+            onClick={handleAddAssignment}
+          >
             + Assignment
           </Button>
-          <Button variant="outline-secondary" className="me-2">
-            + Quizzes
-          </Button>
-          <Button variant="outline-secondary" className="me-2">
-            + Exams
-          </Button>
-          <Button variant="outline-secondary">+ Projects</Button>
         </Col>
       </Row>
 
@@ -173,7 +89,11 @@ export default function AssignmentsPage({
         <Card.Header className="d-flex justify-content-between align-items-center bg-light">
           <h5 className="mb-0">ASSIGNMENTS</h5>
           <span className="fw-normal text-muted">40% of Total</span>
-          <Button variant="outline-secondary" size="sm">
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={handleAddAssignment}
+          >
             +
           </Button>
         </Card.Header>
@@ -184,31 +104,61 @@ export default function AssignmentsPage({
               No assignments found for this course.
             </p>
           ) : (
-            courseAssignments.map((assignment) => (
+            courseAssignments.map((assignment: any) => (
               <div
                 key={assignment._id}
-                className="border-bottom p-3 d-flex align-items-start"
+                className="border-bottom p-3 d-flex align-items-start justify-content-between"
               >
-                <div className="me-3 text-success">
-                  <i className="bi bi-list"></i>
+                <div className="d-flex align-items-start flex-grow-1">
+                  <div className="me-3 text-success">
+                    <i className="bi bi-list"></i>
+                  </div>
+                  <div>
+                    <Link
+                      href={`/Courses/${cid}/Assignments/${assignment._id}/Editor`}
+                      className="fw-bold text-decoration-none text-primary"
+                    >
+                      {assignment.title}
+                    </Link>
+                    <p className="text-muted mb-0 small">
+                      Multiple Modules | <span className="text-dark">Due</span>{" "}
+                      {assignment.dueDate || "soon"} |{" "}
+                      <span className="text-dark">
+                        {assignment.points || 100} Points
+                      </span>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <Link
-                    href={`/Courses/${cid}/Assignments/${assignment._id}/Editor`}
-                    className="fw-bold text-decoration-none text-primary"
-                  >
-                    {assignment.title}
-                  </Link>
-                  <p className="text-muted mb-0 small">
-                    Multiple Modules | <span className="text-dark">Due</span>{" "}
-                    soon | <span className="text-dark">100 Points</span>
-                  </p>
-                </div>
+                <Button
+                  variant="link"
+                  className="text-danger p-0"
+                  onClick={() => handleDeleteClick(assignment._id)}
+                >
+                  <FaTrash />
+                </Button>
               </div>
             ))
           )}
         </Card.Body>
       </Card>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={handleCancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove this assignment?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

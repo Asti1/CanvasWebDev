@@ -3,20 +3,20 @@ import { ReactNode } from "react";
 import CourseNavigation from "./Navigation";
 import { FaAlignJustify } from "react-icons/fa";
 import { useParams, usePathname } from "next/navigation";
-import { courses } from "../../Database";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
-export default function CoursesLayout({
-  children,
-}: Readonly<{ children: ReactNode }>) {
-  const { cid } = useParams() as { cid: string };
+export default function CoursesLayout({ children }: { children: ReactNode }) {
+  const { cid } = useParams();
   const pathname = usePathname();
+  const { courses } = useSelector((state: RootState) => state.coursesReducer);
+  const course = courses.find((course: any) => course._id === cid);
 
   // Compute breadcrumb parts after /Courses/{cid}
   const parts = pathname.split("/").filter(Boolean);
   const afterCid = parts.slice(2); // ["Home"], ["Modules"], ["People","Table"], etc.
   const breadcrumb = afterCid.length ? afterCid.join(" > ") : "Home";
 
-  const course = courses.find((c) => c._id === cid);
   const courseLabel = course?.name ?? `Course ${cid}`;
 
   return (

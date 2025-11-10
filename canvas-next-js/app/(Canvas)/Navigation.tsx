@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LiaBookSolid } from "react-icons/lia";
@@ -7,8 +8,11 @@ import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import Link from "next/link";
-import { courses } from "./Database";
+import * as db from "./Database";
+
 export default function CanvasNavigation() {
+  const [courses, setCourses] = useState(db.courses);
+
   const pathname = usePathname();
   const links = [
     { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
