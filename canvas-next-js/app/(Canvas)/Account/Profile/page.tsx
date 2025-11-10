@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { setCurrentUser } from "../reducer";
-import { useRouter } from "next/navigation";
 
-// Define the Profile type
-interface Profile {
+import { useRouter } from "next/navigation";
+export interface User {
   _id: string;
   username: string;
   password: string;
@@ -14,9 +13,8 @@ interface Profile {
   lastName: string;
   email: string;
   dob: string;
-  role: string;
+  role: "USER" | "ADMIN" | "FACULTY" | "STUDENT";
 }
-
 export default function Profile() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -24,8 +22,8 @@ export default function Profile() {
     (state: RootState) => state.accountReducer
   );
 
-  // Initialize profile with proper typing
-  const [profile, setProfile] = useState<Profile>({
+  // Use User type instead of Profile
+  const [profile, setProfile] = useState<User>({
     _id: "",
     username: "",
     password: "",
@@ -33,7 +31,7 @@ export default function Profile() {
     lastName: "",
     email: "",
     dob: "",
-    role: "USER",
+    role: "USER", // This is now properly typed
   });
 
   // Load current user data into profile when component mounts
@@ -50,7 +48,8 @@ export default function Profile() {
 
   const handleSave = () => {
     dispatch(setCurrentUser(profile));
-    // Optionally show a success message or redirect
+    // Optionally show a success message
+    alert("Profile updated successfully!");
   };
 
   // Redirect to signin if not logged in
@@ -115,7 +114,9 @@ export default function Profile() {
         id="wd-role"
         className="form-control mb-2"
         value={profile.role}
-        onChange={(e) => setProfile({ ...profile, role: e.target.value })}
+        onChange={(e) =>
+          setProfile({ ...profile, role: e.target.value as User["role"] })
+        }
       >
         <option value="USER">User</option>
         <option value="ADMIN">Admin</option>
