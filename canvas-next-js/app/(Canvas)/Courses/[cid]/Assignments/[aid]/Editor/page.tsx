@@ -1,13 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import { Form, Button, Card, Row, Col } from "react-bootstrap";
 import { useRouter, useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-
+import { RootState } from "../../../../../store";
 import { addAssignment, updateAssignment } from "../../reducer";
 import { v4 as uuidv4 } from "uuid";
-import { RootState } from "../../../../../store";
+
+// Define the Assignment type
+interface Assignment {
+  _id: string;
+  title: string;
+  description: string;
+  points: number;
+  dueDate: string;
+  availableFrom: string;
+  availableUntil: string;
+  course: string;
+}
 
 export default function AssignmentEditor() {
   const router = useRouter();
@@ -21,7 +31,7 @@ export default function AssignmentEditor() {
   const isNewAssignment = aid === "new";
   const existingAssignment = assignments.find((a: any) => a._id === aid);
 
-  const [assignment, setAssignment] = useState({
+  const [assignment, setAssignment] = useState<Assignment>({
     _id: "",
     title: "",
     description: "",
@@ -34,13 +44,23 @@ export default function AssignmentEditor() {
 
   useEffect(() => {
     if (!isNewAssignment && existingAssignment) {
-      setAssignment(existingAssignment);
+      // Merge existing assignment with default values for missing fields
+      setAssignment({
+        _id: existingAssignment._id || "",
+        title: existingAssignment.title || "",
+        description: existingAssignment.description || "",
+        points: existingAssignment.points || 100,
+        dueDate: existingAssignment.dueDate || "",
+        availableFrom: existingAssignment.availableFrom || "",
+        availableUntil: existingAssignment.availableUntil || "",
+        course: existingAssignment.course || (cid as string),
+      });
     }
-  }, [isNewAssignment, existingAssignment]);
+  }, [isNewAssignment, existingAssignment, cid]);
 
   const handleSave = () => {
     if (isNewAssignment) {
-      const newAssignment = {
+      const newAssignment: Assignment = {
         ...assignment,
         _id: uuidv4(),
       };
@@ -99,14 +119,14 @@ export default function AssignmentEditor() {
                   onChange={(e) =>
                     setAssignment({
                       ...assignment,
-                      points: parseInt(e.target.value),
+                      points: parseInt(e.target.value) || 0,
                     })
                   }
                 />
               </Form.Group>
 
               {/* Assignment Group */}
-              <Form.Group controlId="assignmentGroup">
+              <Form.Group controlId="assignmentGroup" className="mt-3">
                 <Form.Label className="fw-semibold">
                   Assignment Group
                 </Form.Label>
@@ -119,7 +139,7 @@ export default function AssignmentEditor() {
               </Form.Group>
 
               {/* Display Grade */}
-              <Form.Group controlId="displayGrade">
+              <Form.Group controlId="displayGrade" className="mt-3">
                 <Form.Label className="fw-semibold">
                   Display Grade As
                 </Form.Label>
