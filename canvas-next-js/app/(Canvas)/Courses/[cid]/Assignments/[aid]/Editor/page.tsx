@@ -29,7 +29,7 @@ export default function AssignmentEditor() {
   );
 
   const isNewAssignment = aid === "new";
-  const existingAssignment = assignments.find((a: any) => a._id === aid);
+  const existingAssignment = assignments.find((a) => a._id === aid);
 
   const [assignment, setAssignment] = useState<Assignment>({
     _id: "",
