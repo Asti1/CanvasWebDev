@@ -1,6 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import Link from "next/link";
+
+import { useState } from "react";
+import { redirect } from "next/navigation";
+import * as client from "../client";
 import { Card, Container, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../reducer";
 export default function Signup() {
+  const [user, setUser] = useState<any>({});
+
+  const dispatch = useDispatch();
+  const signup = async () => {
+    try {
+      const currentUser = await client.signup(user);
+      dispatch(setCurrentUser(currentUser));
+      // router.push("/Account/Profile");
+      redirect("/Account/Profile");
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <Container
       id="wd-signin-screen"
@@ -29,6 +50,7 @@ export default function Signup() {
         />
         <br />
         <Link
+          onClick={signup}
           id="wd-signin-btn"
           href="/Account/Profile"
           className="btn btn-primary w-100 mb-2"

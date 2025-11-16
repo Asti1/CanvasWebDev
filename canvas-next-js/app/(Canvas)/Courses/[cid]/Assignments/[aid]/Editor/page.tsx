@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../../store";
 import { addAssignment, updateAssignment } from "../../reducer";
+import * as client from "../../client";
 import { v4 as uuidv4 } from "uuid";
 
 // Define the Assignment type
@@ -58,17 +59,22 @@ export default function AssignmentEditor() {
     }
   }, [isNewAssignment, existingAssignment, cid]);
 
-  const handleSave = () => {
-    if (isNewAssignment) {
-      const newAssignment: Assignment = {
-        ...assignment,
-        _id: uuidv4(),
-      };
-      dispatch(addAssignment(newAssignment));
-    } else {
-      dispatch(updateAssignment(assignment));
+  const handleSave = async () => {
+    try {
+      if (isNewAssignment) {
+        const newAssignment = await client.createAssignmentForCourse(
+          cid as string,
+          assignment
+        );
+        dispatch(addAssignment(newAssignment));
+      } else {
+        const updated = await client.updateAssignment(assignment);
+        dispatch(updateAssignment(updated));
+      }
+      router.push(`/Courses/${cid}/Assignments`);
+    } catch (e) {
+      console.error(e);
     }
-    router.push(`/Courses/${cid}/Assignments`);
   };
 
   const handleCancel = () => {

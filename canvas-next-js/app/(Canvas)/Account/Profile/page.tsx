@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { setCurrentUser } from "../reducer";
-
-import { useRouter } from "next/navigation";
+import * as client from "../client";
+import { redirect } from "next/navigation";
 export interface User {
   _id: string;
   username: string;
@@ -16,12 +16,15 @@ export interface User {
   role: "USER" | "ADMIN" | "FACULTY" | "STUDENT";
 }
 export default function Profile() {
-  const router = useRouter();
+  // const router = useRouter();
   const dispatch = useDispatch();
   const { currentUser } = useSelector(
     (state: RootState) => state.accountReducer
   );
-
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
   // Use User type instead of Profile
   const [profile, setProfile] = useState<User>({
     _id: "",
@@ -41,23 +44,24 @@ export default function Profile() {
     }
   }, [currentUser]);
 
-  const handleSignout = () => {
+  const handleSignout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
-    router.push("/Account/Signin");
+    redirect("/Account/Signin");
   };
 
-  const handleSave = () => {
-    dispatch(setCurrentUser(profile));
-    // Optionally show a success message
-    alert("Profile updated successfully!");
-  };
+  // const handleSave = () => {
+  //   dispatch(setCurrentUser(profile));
+  //   // Optionally show a success message
+  //   alert("Profile updated successfully!");
+  // };
 
   // Redirect to signin if not logged in
   useEffect(() => {
     if (!currentUser) {
-      router.push("/Account/Signin");
+      redirect("/Account/Signin");
     }
-  }, [currentUser, router]);
+  }, [currentUser]);
 
   if (!currentUser) {
     return <div>Loading...</div>;
@@ -123,12 +127,9 @@ export default function Profile() {
         <option value="FACULTY">Faculty</option>
         <option value="STUDENT">Student</option>
       </select>
-      <button
-        id="wd-save-btn"
-        className="btn btn-primary w-100 mb-2"
-        onClick={handleSave}
-      >
-        Save
+      <button onClick={updateProfile} className="btn btn-primary w-100 mb-2">
+        {" "}
+        Update{" "}
       </button>
       <button
         id="wd-signout-btn"

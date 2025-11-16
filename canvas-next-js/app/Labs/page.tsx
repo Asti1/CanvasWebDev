@@ -21,6 +21,9 @@ export default function Labs() {
             <li>
               <Link href="/Labs/Lab4">Lab4: State Management</Link>
             </li>
+            <li>
+              <Link href="/Labs/Lab5">Lab5: NodeJS</Link>
+            </li>
           </ul>
         </div>
       </Provider>

@@ -16,9 +16,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
+import * as client from "./client";
 
 export default function AssignmentsPage() {
   const { cid } = useParams();
@@ -39,14 +40,32 @@ export default function AssignmentsPage() {
     (assignment: any) => assignment.course === cid
   );
 
+  useEffect(() => {
+    const loadAssignments = async () => {
+      if (!cid) return;
+      try {
+        const data = await client.findAssignmentsForCourse(cid.toString());
+        dispatch(setAssignments(data));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadAssignments();
+  }, [cid, dispatch]);
+
   const handleDeleteClick = (assignmentId: string) => {
     setAssignmentToDelete(assignmentId);
     setShowDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (assignmentToDelete) {
-      dispatch(deleteAssignment(assignmentToDelete));
+      try {
+        await client.deleteAssignment(assignmentToDelete);
+        dispatch(deleteAssignment(assignmentToDelete));
+      } catch (e) {
+        console.error(e);
+      }
     }
     setShowDeleteModal(false);
     setAssignmentToDelete(null);

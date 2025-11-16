@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
+// import { Redirect } from "next";
 import Link from "next/link";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { users } from "../../Database";
+import * as client from "../client";
+// import { useNavigate } from "react-router";
 export interface User {
   _id: string;
   username: string;
@@ -23,34 +26,28 @@ export default function Signin() {
     password: "",
   });
   const dispatch = useDispatch();
-  const router = useRouter();
+  // const navigate = useNavigate();
+  // const router = useRouter();
 
-  const signin = () => {
-    const user = users.find(
-      (u) =>
-        u.username === credentials.username &&
-        u.password === credentials.password
-    );
-
-    if (!user) {
-      alert("Invalid credentials");
-      return;
-    }
-
-    // Cast the user to proper User type
-    const typedUser: User = {
-      _id: user._id,
-      username: user.username,
-      password: user.password,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      dob: user.dob,
-      role: (user.role as User["role"]) || "USER",
-    };
-
-    dispatch(setCurrentUser(typedUser));
-    router.push("/Dashboard");
+  const signin = async () => {
+    const user = await client.signin(credentials);
+    if (!user) return;
+    dispatch(setCurrentUser(user));
+    // router.push("/Canvas/Dashboard");
+    // // Cast the user to proper User type
+    // const typedUser: User = {
+    //   _id: user._id,
+    //   username: user.username,
+    //   password: user.password,
+    //   firstName: user.firstName,
+    //   lastName: user.lastName,
+    //   email: user.email,
+    //   dob: user.dob,
+    //   role: (user.role as User["role"]) || "USER",
+    // };
+    // dispatch(setCurrentUser(typedUser));
+    redirect("/Canvas/Dashboard");
+    // router.push("/Dashboard");
   };
 
   return (
