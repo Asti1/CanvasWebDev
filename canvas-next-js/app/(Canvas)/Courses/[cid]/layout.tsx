@@ -9,8 +9,13 @@ import { useSelector } from "react-redux";
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
   const pathname = usePathname();
-  const { courses } = useSelector((state: RootState) => state.coursesReducer);
-  const course = courses.find((course) => course._id === cid);
+
+  type Course = { _id: string; name?: string };
+  const courses = useSelector(
+    (state: RootState) =>
+      (state.coursesReducer as { courses?: Course[] }).courses ?? []
+  );
+  const course = courses.find((c) => c._id === cid);
 
   // Compute breadcrumb parts after /Courses/{cid}
   const parts = pathname.split("/").filter(Boolean);
