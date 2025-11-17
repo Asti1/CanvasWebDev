@@ -30,9 +30,14 @@ export default function Signin() {
   // const router = useRouter();
 
   const signin = async () => {
-    const user = await client.signin(credentials);
-    if (!user) return;
-    dispatch(setCurrentUser(user));
+    try {
+      const user = await client.signin(credentials);
+      if (!user) return;
+      dispatch(setCurrentUser(user));
+    } catch (e) {
+      console.error(e);
+      return;
+    }
     // router.push("/Canvas/Dashboard");
     // // Cast the user to proper User type
     // const typedUser: User = {
@@ -46,7 +51,7 @@ export default function Signin() {
     //   role: (user.role as User["role"]) || "USER",
     // };
     // dispatch(setCurrentUser(typedUser));
-    redirect("/Canvas/Dashboard");
+    redirect("/Dashboard");
     // router.push("/Dashboard");
   };
 
