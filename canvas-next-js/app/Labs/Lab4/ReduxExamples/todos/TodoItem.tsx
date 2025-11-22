@@ -7,7 +7,7 @@ import { ListGroupItem, Button } from "react-bootstrap";
 export default function TodoItem({ todo }: { todo: any }) {
   const dispatch = useDispatch();
   return (
-    <ListGroupItem key={todo.id}>
+    <ListGroupItem>
       <Button
         onClick={() => dispatch(deleteTodo(todo.id))}
         id="wd-delete-todo-click"
@@ -16,8 +16,7 @@ export default function TodoItem({ todo }: { todo: any }) {
         Delete{" "}
       </Button>
       <Button onClick={() => dispatch(setTodo(todo))} id="wd-set-todo-click">
-        {" "}
-        Edit{" "}
+        Edit
       </Button>
       {todo.title}
     </ListGroupItem>

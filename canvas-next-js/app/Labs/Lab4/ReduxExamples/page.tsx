@@ -4,6 +4,7 @@ import CounterRedux from "./CounterRedux/page";
 import HelloRedux from "./HelloRedux/page";
 import store from "../../store";
 import AddRedux from "./AddRedux/page";
+import TodoList from "./todos/TodoList";
 export default function ReduxExamples() {
   return (
     <Provider store={store}>
@@ -12,6 +13,7 @@ export default function ReduxExamples() {
         <HelloRedux />
         <CounterRedux />
         <AddRedux />
+        <TodoList />
       </div>
     </Provider>
   );

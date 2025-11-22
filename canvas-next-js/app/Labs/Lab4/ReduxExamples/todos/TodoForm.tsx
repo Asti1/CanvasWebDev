@@ -2,7 +2,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo, updateTodo, setTodo } from "./todosReducer";
-import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import { ListGroupItem } from "react-bootstrap";
+
 import { Button, FormControl } from "react-bootstrap";
 import { RootState } from "../../../store";
 
@@ -23,7 +24,7 @@ export default function TodoForm() {
         Update{" "}
       </Button>
       <FormControl
-        defaultValue={todo.title}
+        value={todo.title}
         onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}
       />
     </ListGroupItem>
