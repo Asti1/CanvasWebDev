@@ -95,7 +95,7 @@ export default function Modules() {
               className="wd-module p-0 mb-5 fs-6 border-gray"
             >
               <div className="wd-title p-3 ps-2 bg-secondary">
-                <BsGripVertical className="me-2 fs-3" /> {module.name}{" "}
+                <BsGripVertical className="me-2 fs-3" />
                 {!module.editing && module.name}
                 {module.editing && (
                   <FormControl
@@ -114,7 +114,7 @@ export default function Modules() {
                 <ModuleControlButton
                   moduleId={module._id}
                   deleteModule={onRemoveModule}
-                  editModule={onUpdateModule}
+                  editModule={(id: string) => dispatch(editModule(id))}
                 />
               </div>
 

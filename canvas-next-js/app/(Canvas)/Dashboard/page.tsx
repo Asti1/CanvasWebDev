@@ -72,16 +72,19 @@ export default function Dashboard() {
     }
   };
   const onAddNewCourse = async () => {
+    if (!currentUser) return;
     const newCourse = await client.createCourse(course);
     dispatch(setCourses([...courses, newCourse]));
   };
   const onDeleteCourse = async (courseId: string) => {
+    if (!courses.some((c: any) => c._id === courseId)) return;
     const status = await client.deleteCourse(courseId);
     dispatch(
       setCourses(courses.filter((course: any) => course._id !== courseId))
     );
   };
   const onUpdateCourse = async () => {
+    if (!courses.some((c: any) => c._id === course._id)) return;
     await client.updateCourse(course);
     dispatch(
       setCourses(
@@ -97,12 +100,17 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    if (!currentUser) {
+      window.location.href = "/Account/Signin";
+      return;
+    }
     fetchCourses();
     fetchAllCourses();
   }, [currentUser]);
 
   const onEnrollCourse = async (courseId: string) => {
     try {
+      if (!currentUser) return;
       await enrollClient.enrollInCourse("current", courseId);
       await fetchCourses();
     } catch (e) {

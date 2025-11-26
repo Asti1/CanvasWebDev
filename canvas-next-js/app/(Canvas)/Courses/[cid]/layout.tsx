@@ -5,6 +5,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import { useParams, usePathname } from "next/navigation";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { redirect } from "next/navigation";
 
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
@@ -15,6 +16,12 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
     (state: RootState) =>
       (state.coursesReducer as { courses?: Course[] }).courses ?? []
   );
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
+  if (!currentUser) {
+    redirect("/Account/Signin");
+  }
   const course = courses.find((c) => c._id === cid);
 
   // Compute breadcrumb parts after /Courses/{cid}
