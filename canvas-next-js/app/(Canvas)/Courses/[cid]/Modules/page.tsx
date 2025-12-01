@@ -51,15 +51,15 @@ export default function Modules() {
     const module = await client.createModuleForCourse(cid as string, newModule);
     dispatch(setModules([...modules, module]));
   };
-  const onRemoveModule = async (moduleId: string) => {
-    await client.deleteModule(moduleId);
+  const onRemoveModule = async (cid: string, moduleId: string) => {
+    await client.deleteModule(cid, moduleId);
 
     const newModules = modules.filter((m: any) => m._id !== moduleId);
 
     dispatch(setModules(newModules));
   };
-  const onUpdateModule = async (module: any) => {
-    await client.updateModule(module);
+  const onUpdateModule = async (cid: string, module: any) => {
+    await client.updateModule(cid, module);
 
     const newModules = modules.map((m: any) =>
       m._id === module._id ? module : m
@@ -101,11 +101,17 @@ export default function Modules() {
                   <FormControl
                     className="w-50 d-inline-block"
                     onChange={(e) =>
-                      onUpdateModule({ ...module, name: e.target.value })
+                      onUpdateModule(cid as string, {
+                        ...module,
+                        name: e.target.value,
+                      })
                     }
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        onUpdateModule({ ...module, editing: false });
+                        onUpdateModule(cid as string, {
+                          ...module,
+                          editing: false,
+                        });
                       }
                     }}
                     defaultValue={module.name}
@@ -113,7 +119,9 @@ export default function Modules() {
                 )}
                 <ModuleControlButton
                   moduleId={module._id}
-                  deleteModule={onRemoveModule}
+                  deleteModule={(moduleId: string) =>
+                    onRemoveModule(cid as string, moduleId)
+                  }
                   editModule={(id: string) => dispatch(editModule(id))}
                 />
               </div>

@@ -4,6 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { Nav, NavItem, NavLink } from "react-bootstrap";
+import { href } from "react-router";
+import Account from "../page";
+import Users from "./Users/page";
 
 export default function AccountNavigation() {
   const { currentUser } = useSelector(
@@ -11,27 +15,21 @@ export default function AccountNavigation() {
   );
   const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
   const pathname = usePathname();
+  const active = (path: string) => (pathname.includes(path) ? "active" : "");
   return (
-    <div id="wd-account-navigation" className="wd list-group fs-8 rounded-0">
-      <Link href="Signin" className="list-group-item active border-0">
-        {" "}
-        Signin{" "}
-      </Link>{" "}
-      <br />
-      <Link href="Signup" className="list-group-item text-danger border-0">
-        {" "}
-        Signup{" "}
-      </Link>{" "}
-      <br />
-      <Link href="Profile" className="list-group-item text-danger border-0">
-        {" "}
-        Profile{" "}
-      </Link>{" "}
-      <br />
-      <Link href="/Labs" className="list-group-item text-danger border-0">
-        {" "}
-        Labs{" "}
-      </Link>{" "}
-    </div>
+    <Nav variant="pills">
+      {links.map((link) => (
+        <NavItem key={link}>
+          <NavLink as={Link} href={link} active={pathname.endsWith(link)}>
+            {link}
+          </NavLink>
+        </NavItem>
+      ))}
+      {currentUser && currentUser.role === "ADMIN" && (
+        <NavLink as={Link} href={`/Account/Users`} active={pathname.endsWith("Users")}>
+          Users
+        </NavLink>
+      )}
+    </Nav>
   );
 }
