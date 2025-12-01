@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams } from "next/navigation";
 import PeopleTable from "../../Courses/[cid]/People/Table";
 import * as client from "../client";
 import { FormControl } from "react-bootstrap";
