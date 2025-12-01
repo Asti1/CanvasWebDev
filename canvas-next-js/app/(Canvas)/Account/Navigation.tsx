@@ -5,9 +5,6 @@ import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { Nav, NavItem, NavLink } from "react-bootstrap";
-import { href } from "react-router";
-import Account from "../page";
-import Users from "./Users/page";
 
 export default function AccountNavigation() {
   const { currentUser } = useSelector(
@@ -26,7 +23,11 @@ export default function AccountNavigation() {
         </NavItem>
       ))}
       {currentUser && currentUser.role === "ADMIN" && (
-        <NavLink as={Link} href={`/Account/Users`} active={pathname.endsWith("Users")}>
+        <NavLink
+          as={Link}
+          href={`/Account/Users`}
+          active={pathname.endsWith("Users")}
+        >
           Users
         </NavLink>
       )}
