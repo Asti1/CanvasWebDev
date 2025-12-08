@@ -21,4 +21,3 @@ export default function CoursePeopleTablePage() {
 
   return <PeopleTable users={users} fetchUsers={fetchUsers} />;
 }
-

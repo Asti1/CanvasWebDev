@@ -227,7 +227,15 @@ export default function Dashboard() {
         </Row>
       </div>
       <hr />
-      <h2 className="mt-3">Available Courses ({allCourses.filter((c: any) => !courses.some((uc: any) => uc._id === c._id)).length})</h2>
+      <h2 className="mt-3">
+        Available Courses (
+        {
+          allCourses.filter(
+            (c: any) => !courses.some((uc: any) => uc._id === c._id)
+          ).length
+        }
+        )
+      </h2>
       <div id="wd-dashboard-available-courses">
         <Row xs={1} md={5} className="g-4">
           {allCourses
@@ -235,10 +243,20 @@ export default function Dashboard() {
             .map((course: any) => (
               <Col key={course._id} style={{ width: "300px" }}>
                 <Card>
-                  <CardImg src="/images/reactjs.jpeg" variant="top" width="100%" height={160} />
+                  <CardImg
+                    src="/images/reactjs.jpeg"
+                    variant="top"
+                    width="100%"
+                    height={160}
+                  />
                   <CardBody>
-                    <CardTitle className="text-nowrap overflow-hidden">{course.name}</CardTitle>
-                    <CardText className="overflow-hidden" style={{ height: "100px" }}>
+                    <CardTitle className="text-nowrap overflow-hidden">
+                      {course.name}
+                    </CardTitle>
+                    <CardText
+                      className="overflow-hidden"
+                      style={{ height: "100px" }}
+                    >
                       {course.description}
                     </CardText>
                     <Button

@@ -2,7 +2,8 @@
 import axios from "axios";
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
-export const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER || "http://localhost:4000";
+export const HTTP_SERVER =
+  process.env.NEXT_PUBLIC_HTTP_SERVER || "http://localhost:4000";
 const USERS_API = `${HTTP_SERVER}/api/users`;
 const COURSES_API = `${HTTP_SERVER}/api/courses`;
 
@@ -28,8 +29,6 @@ export const findEnrollmentsForUser = async (userId: string) => {
 };
 
 export const findEnrollmentsForCourse = async (courseId: string) => {
-  const { data } = await axios.get(
-    `${COURSES_API}/${courseId}/enrollments`
-  );
+  const { data } = await axios.get(`${COURSES_API}/${courseId}/enrollments`);
   return data;
 };

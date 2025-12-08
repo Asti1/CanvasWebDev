@@ -3,21 +3,26 @@
 import Link from "next/link";
 
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import * as client from "../client";
-import { Card, Container, Form } from "react-bootstrap";
+import { Button, Card, Container, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 export default function Signup() {
   const [user, setUser] = useState<any>({});
+  const [verifyPassword, setVerifyPassword] = useState("");
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const signup = async () => {
+    if (user.password !== verifyPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     try {
       const currentUser = await client.signup(user);
       dispatch(setCurrentUser(currentUser));
-      // router.push("/Account/Profile");
-      redirect("/Account/Profile");
+      router.push("/Account/Profile");
     } catch (e) {
       console.log(e);
     }
@@ -33,6 +38,7 @@ export default function Signup() {
           id="wd-username"
           placeholder="username"
           className="mb-2"
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
         />
         <br />
         <Form.Control
@@ -40,6 +46,7 @@ export default function Signup() {
           placeholder="password"
           type="password"
           className="mb-2"
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
         />
         <br />
         <Form.Control
@@ -47,20 +54,19 @@ export default function Signup() {
           placeholder="verify password"
           type="password"
           className="mb-2"
+          onChange={(e) => setVerifyPassword(e.target.value)}
         />
         <br />
-        <Link
+        <Button
           onClick={signup}
           id="wd-signin-btn"
-          href="/Account/Profile"
           className="btn btn-primary w-100 mb-2"
         >
-          Sign in{" "}
+          Sign up
+        </Button>
+        <Link id="wd-signin-link" href="/Account/Signin">
+          Sign in
         </Link>
-        {/* <br />
-      <Link id="wd-signup-link" href="/Account/Signup">
-        Sign up
-      </Link> */}
       </Card>
     </Container>
   );
